@@ -6,7 +6,6 @@ const router = require('./routes');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const env = require('dotenv')
-const PythonShell = require('python-shell').PythonShell;
 
 const ACTIONS = require('./actions');
 
@@ -16,19 +15,13 @@ const io = require('socket.io')(server, {
         methods: ['GET', 'POST'],
     },
 });
-PythonShell.run('main.py', null, function (err) {
-    if (err) throw err;
-    console.log('finished');
-  });
+
 app.get('/',(req,res)=>{
     res.sendFile(__dirname,'public')
 })
 app.use(cookieParser());
-const corsOption = {
-    credentials: true,
-    origin: ['http://localhost:3000'],
-};
-app.use(cors(corsOption));
+
+app.use(cors());
 app.use('/storage', express.static('storage'));
 
 const PORT = process.env.PORT || 5500;
